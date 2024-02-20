@@ -1,24 +1,20 @@
-package com.tobeto.java3a.bootcampproject.entities;
+package com.tobeto.java3a.bootcampproject.entities.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.*;
+import com.tobeto.java3a.bootcampproject.entities.common.BaseEntity;
+import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
+@MappedSuperclass
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.PRIVATE)
-    private Long id;
+public abstract class User extends BaseEntity {
 
     private String userName;
 

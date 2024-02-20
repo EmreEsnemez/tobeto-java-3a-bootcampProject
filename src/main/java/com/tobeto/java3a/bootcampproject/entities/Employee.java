@@ -1,4 +1,4 @@
-package com.tobeto.java3a.bootcampproject.entities;
+package com.tobeto.java3a.bootcampproject.entities.user;
 
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
