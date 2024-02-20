@@ -1,32 +1,44 @@
 package com.tobeto.java3a.bootcampproject.webapi;
 
-import com.tobeto.java3a.bootcampproject.dataaccess.InstructorRepository;
-import com.tobeto.java3a.bootcampproject.entities.Instructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tobeto.java3a.bootcampproject.business.InstructorManager;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.instructor.InstructorDto;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.instructor.SaveInstructorDto;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/instructors")
+@RestController
+@RequestMapping("/api/instructors")
 public class InstructorsController {
 
-    private InstructorRepository instructorRepository;
+    private InstructorManager instructorManager;
 
-    public InstructorsController(InstructorRepository instructorRepository) {
-        this.instructorRepository = instructorRepository;
+    public InstructorsController(InstructorManager instructorManager) {
+        this.instructorManager = instructorManager;
     }
 
-    @RequestMapping("/")
-    public List<Instructor> findAll() {
-        return instructorRepository.findAll();
+    @GetMapping("/")
+    public List<InstructorDto> getAll() {
+        return instructorManager.getAll();
     }
 
-    @RequestMapping("/add")
-    public void add() {
-        Instructor instructor = new Instructor();
-        instructor.setUserName("doejane");
-        instructor.setEmail("doejane@gmail.com");
-        instructor.setCompanyName("doecomp");
-        instructorRepository.save(instructor);
+    @GetMapping("/{id}")
+    public InstructorDto getById(@PathVariable Long id) {
+        return instructorManager.getById(id);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestBody SaveInstructorDto instructor) {
+        instructorManager.add(instructor);
+    }
+
+    @PostMapping("/edit")
+    public void edit(@PathVariable Long id, @RequestBody SaveInstructorDto instructor) {
+        instructorManager.update(id, instructor);
+    }
+
+    @PostMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        instructorManager.removeById(id);
     }
 }

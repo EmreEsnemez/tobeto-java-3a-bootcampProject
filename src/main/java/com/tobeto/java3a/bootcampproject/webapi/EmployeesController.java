@@ -1,32 +1,45 @@
 package com.tobeto.java3a.bootcampproject.webapi;
 
-import com.tobeto.java3a.bootcampproject.dataaccess.EmployeeRepository;
-import com.tobeto.java3a.bootcampproject.entities.Employee;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tobeto.java3a.bootcampproject.business.EmployeeManager;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.employee.EmployeeDto;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.employee.SaveEmployeeDto;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/employees")
+@RestController
+@RequestMapping("/api/employees")
 public class EmployeesController {
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeManager employeeManager;
 
-    public EmployeesController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeesController(EmployeeManager employeeManager) {
+        this.employeeManager = employeeManager;
     }
 
-    @RequestMapping("/")
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    @GetMapping("/")
+    public List<EmployeeDto> getAll() {
+        return employeeManager.getAll();
     }
 
-    @RequestMapping("/add")
-    public void add() {
-        Employee employee = new Employee();
-        employee.setUserName("doejane");
-        employee.setEmail("doejane@gmail.com");
-        employee.setPosition("Information Technologies");
-        employeeRepository.save(employee);
+    @GetMapping("/{id}")
+    public EmployeeDto
+    getById(@PathVariable Long id) {
+        return employeeManager.getById(id);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestBody SaveEmployeeDto employee) {
+        employeeManager.add(employee);
+    }
+
+    @PostMapping("/edit")
+    public void edit(@PathVariable Long id, @RequestBody SaveEmployeeDto employee) {
+        employeeManager.update(id, employee);
+    }
+
+    @PostMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        employeeManager.removeById(id);
     }
 }

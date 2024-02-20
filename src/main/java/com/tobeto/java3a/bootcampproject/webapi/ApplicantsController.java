@@ -1,32 +1,44 @@
 package com.tobeto.java3a.bootcampproject.webapi;
 
-import com.tobeto.java3a.bootcampproject.dataaccess.ApplicantRepository;
-import com.tobeto.java3a.bootcampproject.entities.Applicant;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tobeto.java3a.bootcampproject.business.ApplicantManager;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.applicant.ApplicantDto;
+import com.tobeto.java3a.bootcampproject.core.dtos.user.applicant.SaveApplicantDto;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/applicants")
+@RestController
+@RequestMapping("/api/applicants")
 public class ApplicantsController {
 
-    private ApplicantRepository applicantRepository;
+    private ApplicantManager applicantManager;
 
-    public ApplicantsController(ApplicantRepository applicantRepository) {
-        this.applicantRepository = applicantRepository;
+    public ApplicantsController(ApplicantManager applicantManager) {
+        this.applicantManager = applicantManager;
     }
 
-    @RequestMapping("/")
-    public List<Applicant> findAll() {
-        return applicantRepository.findAll();
+    @GetMapping("/")
+    public List<ApplicantDto> getAll() {
+        return applicantManager.getAll();
     }
 
-    @RequestMapping("/add")
-    public void add() {
-        Applicant applicant = new Applicant();
-        applicant.setUserName("doejane");
-        applicant.setEmail("doejane@gmail.com");
-        applicant.setAbout("Software Developer");
-        applicantRepository.save(applicant);
+    @GetMapping("/{id}")
+    public ApplicantDto getById(@PathVariable Long id) {
+        return applicantManager.getById(id);
+    }
+
+    @PostMapping("/add")
+    public void add(@RequestBody SaveApplicantDto applicant) {
+        applicantManager.add(applicant);
+    }
+
+    @PostMapping("/edit/{id}")
+    public void edit(@PathVariable Long id, @RequestBody SaveApplicantDto applicant) {
+        applicantManager.update(id, applicant);
+    }
+
+    @PostMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        applicantManager.removeById(id);
     }
 }
